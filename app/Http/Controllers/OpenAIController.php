@@ -52,9 +52,15 @@ class OpenAIController extends Controller
                  $questions = explode("\n", $responseMessage);
                   // Create a new subject
                  $subName=$this->subGet($search);
+<<<<<<< HEAD
                  $subject = Subject::firstOrCreate([
                     'subject_name' => $subName,
                 ]);
+=======
+                  $subject = Subject::create([
+                      'subject_name' =>$subName,
+                  ]);
+>>>>>>> 8f3bd4f92f00e936630cf2a574234e71c8dd15b5
 
                   // Insert questions associated with the subject
                   foreach ($questions as $line) {
