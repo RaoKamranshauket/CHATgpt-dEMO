@@ -21,3 +21,4 @@ Route::get('/query', function () {
     return view('demo');
 });
 Route::post('/open-ai', [OpenAIController::class, 'index'])->name('open-ai');
+Route::get('/open', [OpenAIController::class, 'my']);

@@ -32,7 +32,8 @@
 
                     </div>
                     <div id="apiResponseDiv">
-                        <p id="apiResponseParagraph"></p>
+                    <ul id="questionsList">
+                    </ul>
                     </div>
                 </div>
             </div>
@@ -40,42 +41,8 @@
     </div>
 
     <!-- Bootstrap JS and jQuery -->
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script> --}}
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{{-- <script>
-    // public/js/main.js
-
-$(document).ready(function () {
-    // Handle form submission with AJAX
-    var button = document.getElementById("btn");
-    button.addEventListener("click", function ()  {
-        event.preventDefault();
-      alert('btn is click');
-        // Get the form data
-        var formData = $(this).serialize();
-
-        // Send the AJAX request
-        $.ajax({
-            url: "{{route('open-ai')}}",
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function (response) {
-                // Display success message
-                alert(response.message);
-
-                // You can update the page content or take other actions as needed here
-            },
-            error: function (xhr, status, error) {
-                // Handle errors if any
-                alert('Error occurred: ' + error);
-            }
-        });
-    });
-});
-
-</script> --}}
 
 <script>
     // public/js/main.js
@@ -87,9 +54,13 @@ $(document).ready(function () {
             event.preventDefault();
 
             // Get the form data
-            var formData = $(this).serialize();
-
+            // var formData = $(this).serialize();
+            // var formData = $('#queryInput').val();
             // Get the CSRF token from the meta tag
+            var formData = JSON.stringify({
+        data: $('#queryInput').val()
+    });
+                   console.log(formData);
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             // Send the AJAX request
@@ -103,13 +74,19 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     // Display success message
-                    const apiResponse = JSON.parse(response);
-                    console.log(apiResponse);
-                    const apiResponseParagraph = document.getElementById('apiResponseParagraph');
+           const questions = response.content.split('\n');
+           const questionsList = document.getElementById('questionsList');
+           questionsList.innerHTML='';
+    // // Loop through the questions array and create a list item for each question
+    for (const question of questions) {
+      const listItem = document.createElement('li');
+      listItem.textContent = question;
+      questionsList.appendChild(listItem);
+    }
+
 
 // Set the content of the <p> element to the "content" field from the JSON response
-                             apiResponseParagraph.textContent = apiResponse.content;
-console.log(response);
+
                    // alert(response);
 
                     // You can update the page content or take other actions as needed here
